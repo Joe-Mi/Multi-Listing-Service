@@ -1,0 +1,113 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block data %}
+<div class="Listing">
+    <div class="left_alt">
+        {% if listing %}
+        <div class="Listing_img">
+            <div>{{ listing.listing_name }}</div>
+            <div class="slider_container">
+                <div class="thumbnails_vertical">
+                    <img alt="0" src="{% static 'CSS/default_2.1.jpg' %}" onclick="currentSlide(0)" class="thumb active">
+                    <img alt="1" src="{% static 'CSS/default_2.1.jpg' %}" onclick="currentSlide(1)" class="thumb">
+                    <img alt="2" src="{% static 'CSS/default_2.1.jpg' %}" onclick="currentSlide(2)" class="thumb">
+                </div>
+                <div class="slides_wrapper">
+                    <div class="slide active">
+                        <div class="slide_title"><p>Living Room</p></div>
+                        <img src="{% static 'CSS/startup.jpg' %}" alt="Living Room">
+                    </div>
+                    <div class="slide">
+                        <div class="slide_title"><p>Dining Room</p></div>
+                        <img src="{% static 'CSS/startup.jpg' %}" alt="Dining Room">
+                    </div>
+                    <div class="slide">
+                        <div class="slide_title"><p>Kitchen</p></div>
+                        <img src="{% static 'CSS/startup.jpg' %}" alt="Kitchen">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="Listing_info">
+            <div class="details">
+                <div class="title">
+                    $ {{ listing.price }}
+                </div>
+                <div class="features">
+                    <div>bedrooms: {{ listing.bedrooms }}</div>
+                    <div>bathrooms:{{ listing.bathrooms }}</div>
+                    <div>Sqr ft: {{ listing.space }}</div>
+                </div>
+                <div class="Location">
+                    <div>State: {{ listing.county }}</div>
+                    <div>City: {{ listing.city }}</div>
+                    <div>Address: {{ listing.streetAddress }}</div>
+                </div>
+            </div>
+            <div class="options">
+                {%  if not is_seller %} 
+                    <form action="{% url 'newchat' listing.seller_id.pk %}" method="POST">
+                        {% csrf_token %}
+                        {{ chatform}}
+                        <button type="submit">Contact Seller</button>
+                    </form>
+                {% endif %}  
+
+                {% if request.user.role == 'buyer' and is_saved %}
+                    <form action="{% url 'unsave' %}" method="POST">
+                        {% csrf_token %}
+                        <input type='hidden' name="listing_id" value="{{ listing.pk }}">
+                        <button type="submit">Unsave</button>
+                    </form>
+                {% elif request.user.role == 'buyer' %}
+                    <form action="{% url 'save' %}" method="POST">
+                        {% csrf_token %}
+                        <input type='hidden' name="listing_id" value="{{ listing.pk }}">
+                        <button type="submit">Save</button>
+                    </form>
+                {% elif is_seller %}
+                    <form action="{% url 'remove' %}" method="POST">
+                        {% csrf_token %}
+                        <input type='hidden' name="listing_id" value="{{ listing.pk }}">
+                        <button type="submit">delete</button>
+                    </form>
+                {% endif %}
+            </div>            
+        </div>
+        {% else %}
+            <p>No listing details available.</p><br>
+            <p>Check County, City, Address.</p>
+        {% endif %}
+    </div>
+    <div class="right">
+        {% if is_seller %}
+            <h1 class=".section_titles"  style="margin-bottom: 40px;"> update Listing: </h1>
+            <form action="{% url 'updateListing' listing.pk %}" method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+                <button type="submit">Save</button>
+            </form>
+        {% else %}
+            {% for listing in reccs.all %}
+            <div class="listing">
+                <div class="photo">
+                    <a href="{% url 'Listing' listing.id  %}" class="button">View</a>
+                </div>
+                <div class="description">
+                    <div class="price">${{ listing.price }}</div>
+                    <div class="info">{{ listing.bedrooms }} bds, {{ listing.bathrooms }} ba, {{ listing.space }} sqft</div>
+                    <div class="address">{{ listing.listing_name }}, {{ listing.city }}, {{ listing.county }}</div>                        
+                </div>
+            </div> 
+            {% endfor %}  
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'startUp.html' %}
+
+{% block input %}
+<h1 class=".section_titles"  style="padding-right: 20px;"> Login: </h1>
+<div>
+    <form class='form' method="POST" action="login" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in LForm %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <button type="submit" name="RS">Login</button>
+        {% block errors %}
+        {% endblock %}
+    </form>
+</div>
+{% endblock %}

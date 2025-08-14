@@ -1,0 +1,61 @@
+{% extends 'main.html' %}
+
+
+{% block data %}
+<div class="profile">
+    <div class="left">
+        <h2 class="chat_title"> Chat:  
+            {% for user in most_recent_chat.users.all %}
+                {{user.username}} 
+            {% endfor %} 
+        </h2>
+        <div class="mainChat">
+            {% if most_recent_chat %}
+                {% for log in chatlogs %}
+                    <div class="messages">
+                        {{ log.from_user }}: {{ log.message }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No recent chats found.</p>
+            {% endif %}
+        </div>
+        <div class="chatInput">
+            <form id="send-form" name="send-form">
+                {% csrf_token %}
+                <meta name="csrf-token" content="{{ csrf_token }}">
+                <input type="hidden"  name="chat_id" id="chat_id" value= '{{ chat_id }}'>
+                <input  type="text" name="message" id="message" placeholder="Type your message">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <div class="right">
+        <div class="details">
+            <h2>Account: {{user.username}}</h2>
+            <p>Account type: {{user.role}}</p>
+            {% if user.role == 'buyer'%}
+                <p>Budget : $ {{ user.buyerprofile.budget }}</p>
+                <p>Address : {{ user.buyerprofile.address }}</p>
+            {% elif user.role == 'seller'%}
+                <p>Company : {{ user.sellerprofile.company }}</p>
+            {% endif %}
+        </div>
+        <div class='chats'>
+            {% for chat in chats %}
+                <div class='chat'>
+                    <p class="users">Users:  
+                    {% for user in chat.users.all %}
+                    {{user.username}} 
+                    {% endfor %}   
+                    </p>
+                    <form action="{% url 'chat' chat.pk %}" method="GET">
+                        {% csrf_token %}
+                        <button type="submit">chat</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>        
+    </div>
+</div>
+{% endblock %}

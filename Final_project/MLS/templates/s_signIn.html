@@ -1,0 +1,19 @@
+{% extends 'startUp.html' %}
+
+{% block input %}
+<h1 class=".section_titles"  style="padding-right: 20px;"> Seller Register: </h1>
+<div>
+    <form class='form' method="POST" action="{% url 'seller_signIn' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="Role" value="SELLER">
+        {% for field in sellerF %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <button type="submit" >Register as Seller</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block data %}
+<div class="Listing">
+    <div class="left">
+        <h2 class="left_heading">Saved</h2>
+        <div class="left_items">
+            {% for listing in saved_listings.all %}
+                <div class="listing">
+                    <div class="photo">
+                        <a href="{% url 'Listing' listing.id  %}" class="button">View</a>
+                    </div>
+                    <div class="description">
+                        <div class="price">${{ listing.price }}</div>
+                        <div class="info">{{ listing.bedrooms }} bds, {{ listing.bathrooms }} ba, {{ listing.space }} sqft</div>
+                        <div class="address">{{ listing.listing_name }}, {{ listing.city }}, {{ listing.county }}</div>                        
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="right">
+        <h2 class="right_title">Update Account details:</h2>
+        <div class="right_items">
+            <form class='form' method="POST" action="{% url 'update' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in PForm %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+                <button type="submit" name="RS">Update</button>
+                {% block errors %}
+                {% endblock %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

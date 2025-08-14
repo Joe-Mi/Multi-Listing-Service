@@ -1,0 +1,41 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block data %}
+<div class="search">
+    <div class="top">
+        <form class="filter" method="GET" action="{% url 'search' %}">
+            {% csrf_token %}
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" placeholder="Max Price">
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" placeholder="Preferred Location">
+            <label for="type">Type:</label>
+            <select id="type" name="type">
+                <option value="None">None</option>
+                <option value="Single Family">Single Family</option>
+                <option value="Multi Family">Multi Family</option>
+                <option value="Condo">Condo</option>
+                <option value="Lot">Lot</option>
+                <option value="Townhouse">Townhouse</option>
+                <option value="Manufactured">Manufactured</option>
+            </select>
+            <button type="submit">Apply Filters</button>
+        </form>
+    </div>
+    <div class="bottom">
+            {% for listing in Results %}
+            <div class="listing">
+                <div class="photo">
+                    <a href="{% url 'Listing' listing.id  %}" class="button">View</a>
+                </div>
+                <div class="description">
+                    <div class="price">${{ listing.price }}</div>
+                    <div class="info">{{ listing.bedrooms }} bds, {{ listing.bathrooms }} ba, {{ listing.space }} sqft</div>
+                    <div class="address">{{ listing.listing_name }}, {{ listing.city }}, {{ listing.county }}</div>                        
+                </div>
+            </div>
+        {% endfor %}
+    </div>    
+</div>
+{% endblock %}

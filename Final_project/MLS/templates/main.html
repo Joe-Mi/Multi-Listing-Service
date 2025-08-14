@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="head">
+        <ul class="navbar">
+            <li><a href="/MLS/home">Home</a></li>
+            <li><a href="/MLS/search">Search</a></li>
+            {% if request.user.role == 'seller' %}
+                <li><a href="/MLS/user/listings">Your Listings</a></li>
+                <li><a href="/MLS/profile">Profile</a></li>
+            {% elif request.user.role == 'buyer' %}
+                <li><a href="/MLS/user/{{user.username}}/saved">Listings</a></li>
+                <li><a href="/MLS/profile">Profile</a></li>
+            {% else %}
+                <li><a href="/MLS/profile">Profile</a></li>
+            {% endif %}
+            <li><a href="/MLS/logout">Logout</a></li>
+        </ul>
+        <div class="searchbar">
+            <form method="post" action="{% url 'search' %}">
+                {% csrf_token %}
+                <input type="text" id="S-Inputs" name="searchQuery"
+                    placeholder="Search for Listings">
+                <button type="submit">Search</button>
+            </form>
+        </div> 
+</div>
+<div class="main">
+    {% block data %}
+    {% endblock %}
+</div>
+<div class="foot">Individual project: Developing a Property Marketplace application with a Recommendation system.</div>
+{% endblock %}

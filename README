@@ -1,0 +1,77 @@
+# Django Web App
+
+This is a Django-based web application built for managing property listings and providing personalized recommendations to users based on listing features.
+
+## Features
+
+- User authentication (login/registration).
+- CRUD operations for property listings.
+- Search and filtering.
+- basic communication.
+- Recommendation engine using Faiss and vector embeddings.
+- Responsive frontend using vanilla CSS.
+
+## Tech Stack
+
+- **Backend:** Django 4.x
+- **Frontend:** HTML, CSS, JavaScript, jQuery
+- **Database:** SQLite (default)
+- **Other Tools:** [e.g., faiss, pickle, numpy, pandas]
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.9+
+- pip
+- virtualenv (recommended)
+- faiss-cpu
+- pickle
+- django
+- pillow
+- numpy
+- pandas
+- random
+
+- kaggle dataset: https://www.kaggle.com/datasets/promptcloud/real-estate-data-from-trulia?resource=download
+
+### File structure:
+- final
+    - Final_project
+        - Final_project: The django project itself.
+            -> settings.py
+            -> urls.py
+            -> static
+                - CSS
+                - JS
+            
+        - MLS: The Django app.
+            -> templates: The app HTML files.
+            -> models.py: Contains the objects details stored in the database.
+            -> paths.py : Contais the urls used to handle and respond to requests.
+            -> views.py: the methods for each url.
+            -> forms.py: Contains the forms used in the views.py.
+            -> test.py: Contains the unit test used to asses the app.
+
+        - all_embedding_2.pkl 
+        - data.csv: the cleaned dataset used to populate the db.
+        - faiss_index_2.index
+        - manage.py
+        - populate.p: populates the back end, with the dataset.
+        - requirements.txt: details the app dependancies and packages.
+        
+
+### Setup Instructions
+
+0. Install the nessecary tools.
+
+1. Run 'python manage.py runserver' in the terminal.
+
+2. Enter the following url into your browser: http://127.0.0.1:8000/MLS/login
+
+3. You can either login or sign up, but if you would prefer an active account use one of the following:
+        - Username t004, password: pass12345
+        - Username t005, password: pass12345
+    
+4. To access the backend you'll have to craete a super user, run the following in the terminal:
+        -python manage.py createsuperuser. 
